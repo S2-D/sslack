@@ -1,0 +1,22 @@
+{ // 기본 설정
+  "compilerOptions": {
+    "esModuleInterop": true, //import * as React from "react"; -> import React from "react"; 로 가져올 수 있다.
+    "sourceMap": true,   // 에러 났을 때 원래 위치 찾기 편함.
+    "lib": ["ES2020", "DOM"], // 최신 문법
+    "jsx": "react", // jsx 리액트로 지정
+    "module": "esnext", //최신 모듈 사용 import, export
+    "moduleResolution": "Node", // 노드가 이해할 수 있는 언어로
+    "target": "es5", // es6를 사용하더라도 es5로 변환
+    "strict": true, // 타입 체크 엄격
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": { //import 편하게 하기 위해 ../../ 이런걸 절대 경로로 @src/hello.js 이렇게!
+      "@hooks/*": ["hooks/*"],
+      "@components/*": ["components/*"],
+      "@layouts/*": ["layouts/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"],
+      "@typings/*": ["typings/*"]
+    }
+  }
+}
