@@ -34,8 +34,17 @@ const SignUp = () => {
     (e) => {
       e.preventDefault();
       console.log(email, nickname, password, passwordCheck);
-      if (!setMismatchError) {
-        console.log('성공성공^^^');
+      if (!mismatchError && nickname) {
+        console.log('서버로 회원가입하기^^^');
+        axios
+          .post('http://localhost:3095/api/users', { email, nickname, password })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {});
       }
     },
     [email, nickname, password, passwordCheck],

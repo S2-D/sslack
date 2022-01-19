@@ -1,7 +1,7 @@
 import path from 'path';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import webpack, { Configuration as WebpackConfiguration } from "webpack";
-import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
+import webpack, { Configuration as WebpackConfiguration } from 'webpack';
+import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -19,7 +19,8 @@ const config: Configuration = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     //바벨이 처리할 확장자 목록
-    alias: { // .tsconfig.json path에서도 설정해고 여기서도
+    alias: {
+      // .tsconfig.json path에서도 설정해고 여기서도
       '@hooks': path.resolve(__dirname, 'hooks'),
       '@components': path.resolve(__dirname, 'components'),
       '@layouts': path.resolve(__dirname, 'layouts'),
@@ -40,14 +41,15 @@ const config: Configuration = {
           presets: [
             [
               '@babel/preset-env',
-              {// 지원할 브라우저 및 버전
-                targets: { browsers: ['last 2 chrome versions','IE 10'] },
+              {
+                // 지원할 브라우저 및 버전
+                targets: { browsers: ['last 2 chrome versions', 'IE 10'] },
                 debug: isDevelopment,
               },
             ],
             '@babel/preset-react', //리액트를 쓴다면
             '@babel/preset-typescript', //ts를 쓴다면면
-            ],
+          ],
           env: {
             development: {
               plugins: [require.resolve('react-refresh/babel')],
@@ -82,17 +84,25 @@ const config: Configuration = {
     port: 3090,
     devMiddleware: { publicPath: '/dist/' },
     static: { directory: path.resolve(__dirname) },
+    // proxy: {
+    //   '/api/': {
+    //     target: 'http://localhost:3095',
+    //     changeOrigin: true,
+    //   },
+    // },
   },
 };
 
 // 개발 환경일때
 if (isDevelopment && config.plugins) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
-  config.plugins.push(new ReactRefreshWebpackPlugin({
-    overlay: {
-      useURLPolyfill: true
-    }
-  }));
+  config.plugins.push(
+    new ReactRefreshWebpackPlugin({
+      overlay: {
+        useURLPolyfill: true,
+      },
+    }),
+  );
 }
 
 // 개발 환경 아닐 때 (배포)
