@@ -8,7 +8,10 @@ import fetcher from '@utils/fetcher';
 //master
 
 const LogIn = () => {
-  const { data, error } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data, error } = useSWR('http://localhost:3095/api/users', fetcher, {
+    dedupingInterval: 100000,
+    //요청을 100초마다 한번씩 보내
+  });
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -17,7 +20,7 @@ const LogIn = () => {
       e.preventDefault();
       setLogInError(false);
       axios
-        .post('/api/users/login', { email, password })
+        .post('/api/users/login', { email, password }, { withCredentials: true })
         .then(() => {})
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
