@@ -16,7 +16,7 @@ const LogIn = () => {
       e.preventDefault();
       setLogInError(false);
       axios
-        .post('/api/users/login', { email, password })
+        .post('/api/users/login', { email, password }, { withCredentials: true })
         .then(() => {})
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
