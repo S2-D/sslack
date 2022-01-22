@@ -1,17 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import useInput from '@hooks/useInput';
 import { Button, Form, Error, Header, Input, Label, LinkContainer } from '@pages/SignUp/styles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 //master
 
 const LogIn = () => {
-  const { data, error } = useSWR('http://localhost:3095/api/users', fetcher, {
-    dedupingInterval: 100000,
-    //요청을 100초마다 한번씩 보내
-  });
+  const { data: userData, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -21,19 +18,20 @@ const LogIn = () => {
       setLogInError(false);
       axios
         .post('/api/users/login', { email, password }, { withCredentials: true })
-        .then(() => {})
+        .then((response) => {
+          mutate(response.data, false);
+        })
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
         });
     },
-    [email, password],
+    [email, password, mutate],
   );
 
-  // console.log(error, userData);
-  // if (!error && userData) {
-  //   console.log('로그인됨', userData);
-  //   return <Redirect to="/workspace/sleact/channel/일반" />;
-  // }
+  if (!error && userData) {
+    console.log('로그인됨', userData);
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">
