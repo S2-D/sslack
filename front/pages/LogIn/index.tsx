@@ -5,7 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-//master
+//imac
 
 const LogIn = () => {
   const { data: userData, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
