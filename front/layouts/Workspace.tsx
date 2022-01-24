@@ -12,7 +12,7 @@ const Workspace: FC = ({ children }) => {
         withCredentials: true, //쿠키 공유해주기 위해
       })
       .then((response) => {
-        mutate();
+        mutate(false,false);
       })
       .catch((error) => console.dir(error));
   }, []);
