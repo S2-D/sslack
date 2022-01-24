@@ -1,18 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import useInput from '@hooks/useInput';
 import { Button, Form, Error, Header, Input, Label, LinkContainer } from '@pages/SignUp/styles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 //master
 
-
 const LogIn = () => {
-  const { data, error } = useSWR('http://localhost:3095/api/users', fetcher, {
-    dedupingInterval: 100000,
-    //요청을 100초마다 한번씩 보내
-  });
+  const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -21,14 +17,29 @@ const LogIn = () => {
       e.preventDefault();
       setLogInError(false);
       axios
-        .post('/api/users/login', { email, password }, { withCredentials: true })
-        .then(() => {})
+        .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
+        .then((response) => {
+          mutate().then((r) => console.log('r', r));
+        })
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
         });
     },
-    [email, password],
+    [email, password, mutate],
   );
+
+  // if (userData) {
+  //   return <Redirect to="workspace/channel" />;
+  // }
+
+  if (!data === undefined) {
+    return <div>로딩중</div>;
+  }
+
+  if (data) {
+    console.log('로그인됨', data);
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">

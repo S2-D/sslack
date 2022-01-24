@@ -4,10 +4,14 @@ import { Button, Error, Form, Header, Input, Label, LinkContainer, Success } fro
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import useInput from '@hooks/useInput';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 // import useSWR from 'swr';
 
 const SignUp = () => {
+  const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
+
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('a');
   const [password, setPassword] = useState('');
@@ -58,6 +62,15 @@ const SignUp = () => {
     // useCallback : 내부 콜백함수를 캐싱. 기억하고 deps의 state가 바뀌면 재실행.
     // 안감싸면 리랜더링이 많이 일어남. (성능문제 X, 디버깅이 어려움)
   );
+
+  if (!data === undefined) {
+    return <div>로딩중</div>;
+  }
+  if (data) {
+    console.log('로그인됨', data);
+    return <Redirect to="/workspace/channel" />;
+    //return 은 항상 hooks 보다 아래에 있어야 한다.
+  }
 
   return (
     <div id="container">
