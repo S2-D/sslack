@@ -8,8 +8,13 @@ import fetcher from '@utils/fetcher';
 //master
 
 const LogIn = () => {
-  const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher,{dedupingInterval:2000
-      //2초 이후에 서버에 요청이 간다. (2초동안은 먼저 가져온 데이터로 사용)
+  const {
+    data: userData,
+    error,
+    mutate,
+  } = useSWR('http://localhost:3095/api/users', fetcher, {
+    dedupingInterval: 2000,
+    //2초 이후에 서버에 요청이 간다. (2초동안은 먼저 가져온 데이터로 사용)
   });
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
@@ -20,8 +25,8 @@ const LogIn = () => {
       setLogInError(false);
       axios
         .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
-        .then((response) => {
-          mutate(response.data,false);
+        .then(() => {
+          mutate();
         })
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
@@ -34,12 +39,13 @@ const LogIn = () => {
   //   return <Redirect to="workspace/channel" />;
   // }
 
-  if (!data === undefined) {
+  if (!userData === undefined) {
     return <div>로딩중</div>;
   }
 
-  if (data) {
-    console.log('로그인됨', data);
+  console.log(error, userData);
+  if (!error && userData) {
+    console.log('로그인됨', userData);
     return <Redirect to="/workspace/channel" />;
   }
 
