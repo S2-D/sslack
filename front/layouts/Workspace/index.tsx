@@ -38,7 +38,7 @@ const Workspace: FC = ({ children }) => {
   }, []);
 
   const onClickUserProfile = useCallback(() => {
-    setShowUserMenu((prev) => !showUserMenu);
+    setShowUserMenu((prev) => !prev);
   }, []);
 
   if (!data) {
@@ -60,7 +60,7 @@ const Workspace: FC = ({ children }) => {
                     <span id="profile-active">Active</span>
                   </div>
                 </ProfileModal>
-                <LogOutButton onClick={onLogOut}>로그아웃</LogOutButton>
+                <LogOutButton>로그아웃</LogOutButton>
               </Menu>
             )}
           </span>
