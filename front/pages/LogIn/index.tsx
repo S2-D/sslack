@@ -25,7 +25,7 @@ const LogIn = () => {
       setLogInError(false);
       axios
         .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
-        .then((resp) => {
+        .then(() => {
           mutate();
         })
         .catch((error) => {
@@ -43,9 +43,7 @@ const LogIn = () => {
     return <div>로딩중</div>;
   }
 
-  console.log(error, userData);
   if (!error && userData) {
-    console.log('로그인됨', userData);
     return <Redirect to="/workspace/sleact/channel/일반" />;
   }
 

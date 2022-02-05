@@ -68,7 +68,7 @@ const Workspace: VFC = () => {
     setShowUserMenu((prev) => !prev);
   }, []);
 
-  const onClickUserProfile = useCallback((e) => {
+  const onClickUserProfile = useCallback(() => {
     setShowUserMenu((prev) => !prev);
   }, []);
 
@@ -140,7 +140,7 @@ const Workspace: VFC = () => {
                     <span id="profile-active">Active</span>
                   </div>
                 </ProfileModal>
-                <LogOutButton onClick={() => onLogout()}>로그아웃</LogOutButton>
+                <LogOutButton onClick={onLogout}>로그아웃</LogOutButton>
               </Menu>
             )}
           </span>
@@ -163,7 +163,7 @@ const Workspace: VFC = () => {
           <MenuScroll>
             <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
               <WorkspaceModal>
-                {/*<h2>{userData?.Workspaces.find((v) => v.url === workspace)?.name}</h2>*/}
+                <h2>{userData?.Workspaces.find((v) => v.url === workspace)?.name}</h2>
                 {/*<button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button>*/}
                 <button onClick={onClickAddChannel}>채널 만들기</button>
                 <button onClick={onLogout}>로그아웃</button>

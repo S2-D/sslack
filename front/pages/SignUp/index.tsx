@@ -10,10 +10,9 @@ import fetcher from '@utils/fetcher';
 // import useSWR from 'swr';
 
 const SignUp = () => {
-  const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
-
+  const { data } = useSWR('http://localhost:3095/api/users', fetcher);
   const [email, onChangeEmail] = useInput('');
-  const [nickname, onChangeNickname] = useInput('a');
+  const [nickname, onChangeNickname] = useInput('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [mismatchError, setMismatchError] = useState(false);
@@ -39,9 +38,7 @@ const SignUp = () => {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      console.log(email, nickname, password, passwordCheck);
       if (!mismatchError && nickname) {
-        console.log('서버로 회원가입하기^^^');
         setSignUpError('');
         setSignUpSuccess(false);
         axios
