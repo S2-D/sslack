@@ -22,12 +22,13 @@ import {
 import gravatar from 'gravatar';
 import loadable from '@loadable/component';
 import Menu from '@components/Menu';
-import { IUser } from '@typings/db';
 import { Button, Input, Label } from '@pages/SignUp/styles';
 import Modal from '@components/Modal';
 import useInput from '@hooks/useInput';
 import { toast } from 'react-toastify';
 import CreateChannelModal from '@components/CreateChannelModal';
+import { useParams } from 'react-router';
+import { IChannel, IUser } from '@typings/db';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -39,7 +40,18 @@ const Workspace: VFC = () => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
-  const { data: userData, mutate } = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
+
+  const { workspace } = useParams<{ workspace: string }>();
+  const { data: userData, mutate } = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher, {
+    dedupingInterval: 2000,
+  });
+
+  const { data: channelData } = useSWR<IChannel[]>(
+    //조건부 요청 (로그인한 상태에서만 )
+    userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
+    fetcher,
+  );
+
   const onLogout = useCallback(() => {
     axios
       .post('http://localhost:3095/api/users/logout', null, {
@@ -128,13 +140,12 @@ const Workspace: VFC = () => {
                     <span id="profile-active">Active</span>
                   </div>
                 </ProfileModal>
-                <LogOutButton>로그아웃</LogOutButton>
+                <LogOutButton onClick={() => onLogout()}>로그아웃</LogOutButton>
               </Menu>
             )}
           </span>
         </RightMenu>
       </Header>
-      <button onClick={() => onLogout()}>로그아웃</button>
       <WorkspaceWrapper>
         <Workspaces>
           {userData?.Workspaces.map((ws) => {
@@ -158,6 +169,9 @@ const Workspace: VFC = () => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
+            {channelData?.map((v) => (
+              <div>{v.name}</div>
+            ))}
           </MenuScroll>
         </Channels>
         <Chats>
