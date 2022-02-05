@@ -68,7 +68,7 @@ const SignUp = () => {
   }
   if (data) {
     console.log('로그인됨', data);
-    return <Redirect to="/workspace/channel" />;
+    return <Redirect to="/workspace/sleact/channel/일반" />;
     //return 은 항상 hooks 보다 아래에 있어야 한다.
   }
 
