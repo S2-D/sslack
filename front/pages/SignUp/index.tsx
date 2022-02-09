@@ -10,7 +10,7 @@ import fetcher from '@utils/fetcher';
 // import useSWR from 'swr';
 
 const SignUp = () => {
-  const { data } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data } = useSWR('/api/users', fetcher);
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, setPassword] = useState('');
@@ -42,7 +42,7 @@ const SignUp = () => {
         setSignUpError('');
         setSignUpSuccess(false);
         axios
-          .post('http://localhost:3095/api/users', { email, nickname, password })
+          .post('/api/users', { email, nickname, password })
           .then((response) => {
             console.log(response);
             setSignUpSuccess(true);

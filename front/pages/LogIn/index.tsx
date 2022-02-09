@@ -12,7 +12,7 @@ const LogIn = () => {
     data: userData,
     error,
     mutate,
-  } = useSWR('http://localhost:3095/api/users', fetcher, {
+  } = useSWR('/api/users', fetcher, {
     dedupingInterval: 2000,
     //2초 이후에 서버에 요청이 간다. (2초동안은 먼저 가져온 데이터로 사용)
   });
@@ -24,7 +24,7 @@ const LogIn = () => {
       e.preventDefault();
       setLogInError(false);
       axios
-        .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
+        .post('/api/users/login', { email, password }, { withCredentials: true })
         .then(() => {
           mutate();
         })
