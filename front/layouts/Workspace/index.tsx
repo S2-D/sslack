@@ -31,6 +31,8 @@ import { useParams } from 'react-router';
 import { IChannel, IUser } from '@typings/db';
 import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 import InviteChannelModal from '@components/InviteChannelModal';
+import ChannelList from '@components/ChannelList';
+import DMList from '@components/DMList';
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
@@ -179,6 +181,8 @@ const Workspace: VFC = () => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
+            <ChannelList userData={userData} />
+            <DMList userData={userData} />
             {channelData?.map((v) => (
               <div>{v.name}</div>
             ))}
